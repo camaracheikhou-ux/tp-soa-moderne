@@ -1,0 +1,13 @@
+package fr.ipsl.soa.graphql;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class GraphqlAgregateurApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(GraphqlAgregateurApplication.class, args);
+	}
+
+}

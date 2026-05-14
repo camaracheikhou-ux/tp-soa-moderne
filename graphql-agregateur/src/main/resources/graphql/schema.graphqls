@@ -1,0 +1,22 @@
+type Produit {
+  id: ID!
+  nom: String!
+  prix: Float!
+  stock: Int!
+  commandes: [Commande]
+}
+
+type Commande {
+  id: ID!
+  produitId: ID!
+  quantite: Int!
+  statut: String!
+  date: String!
+}
+
+type Query {
+  produits: [Produit!]!
+  produit(id: ID!): Produit
+  commandes: [Commande!]!
+  commande(id: ID!): Commande
+}

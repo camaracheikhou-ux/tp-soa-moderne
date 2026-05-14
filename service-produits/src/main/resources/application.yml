@@ -1,0 +1,31 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: service-produits
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      catalogue:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 15s
+        permittedNumberOfCallsInHalfOpenState: 3
+  retry:
+    instances:
+      catalogue:
+        maxAttempts: 3
+        waitDuration: 500ms
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
