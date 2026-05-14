@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: route-produits
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/produits/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Source, gateway
+            - name: CircuitBreaker
+              args:
+                name: cb-produits
+                fallbackUri: forward:/fallback/produits
+
+        - id: route-commandes
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/commandes/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Source, gateway
+            - name: CircuitBreaker
+              args:
+                name: cb-commandes
+                fallbackUri: forward:/fallback/commandes
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      cb-produits:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+      cb-commandes:
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
